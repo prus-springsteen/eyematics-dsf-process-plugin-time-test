@@ -1,0 +1,24 @@
+<ValueSet xmlns="http://hl7.org/fhir">
+    <meta>
+        <tag>
+            <system value="http://dsf.dev/fhir/CodeSystem/read-access-tag" />
+            <code value="ALL" />
+        </tag>
+    </meta>
+    <url value="https://eyematics.org/fhir/ValueSet/eyematics-receive-process-value-set"/>
+    <version value="#{version}" />
+    <name value="EyeMaticsReceiveProcessValueSet"/>
+    <title value="EyeMatics Receive Process Value Set"/>
+    <status value="unknown" />
+    <experimental value="false"/>
+    <date value="#{date}"/>
+    <publisher value="DSF"/>
+    <description value="ValueSet with standard values for the EyeMatics Receive Process"/>
+    <immutable value="true"/>
+    <compose>
+        <include>
+            <system value="https://eyematics.org/fhir/CodeSystem/eyematics-receive-process-code-system"/>
+            <version value="#{version}" />
+        </include>
+    </compose>
+</ValueSet>

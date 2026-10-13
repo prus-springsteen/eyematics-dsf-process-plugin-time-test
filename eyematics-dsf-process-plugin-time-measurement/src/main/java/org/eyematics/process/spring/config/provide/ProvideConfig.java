@@ -1,0 +1,203 @@
+package org.eyematics.process.spring.config.provide;
+
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import jakarta.annotation.PostConstruct;
+import org.eyematics.process.interaction.EyeMaticsAdminApprovalTask;
+import org.eyematics.process.message.provide.CloseReceiveSubProcessProvideMessageTask;
+import org.eyematics.process.message.provide.ProvideDataMessageTask;
+import org.eyematics.process.service.provide.*;
+import org.eyematics.process.spring.config.receive.CryptoConfig;
+import org.eyematics.process.utils.generator.DataSetStatusGenerator;
+import org.eyematics.process.utils.measurement.TimeMeasurement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+
+@Configuration
+public class ProvideConfig {
+
+    @Autowired
+    private ProcessPluginApi api;
+
+    @Autowired
+    private CryptoConfig cryptoConfig;
+
+    @Autowired
+    private ProvideAdminApprovalConfig provideAdminApprovalConfig;
+
+    @Autowired
+    private ProvideFhirClientConfig provideFhirClientConfig;
+
+    @Autowired
+    private ProvideConsentConfig provideConsentConfig;
+
+    @Autowired
+    private ProvideFTTPClientConfig provideFTTPClientConfig;
+
+    @Autowired
+    private DataSetStatusGenerator dataSetStatusGenerator;
+
+    @Autowired
+    private ProvideMailConfig provideMailConfig;
+
+    @Autowired
+    private ProvidePseudonymizeConfig providePseudonymizeConfig;
+
+    @Autowired
+    private ProvideDataConfig provideDataConfig;
+
+    @Autowired
+    private ProvideBundleConfig provideBundleConfig;
+
+    @Autowired
+    private ProvideMeasurementConfig provideMeasurementConfig;
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public PrepareProvideDataTask prepareProvideDataTask() {
+        return new PrepareProvideDataTask(api, provideAdminApprovalConfig.isAdminApproval());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public SelectReceiveTargetTask selectReceiveTargetTask() {
+        return new SelectReceiveTargetTask(api);
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public EyeMaticsAdminApprovalTask adminApprovalTask() {
+        return new EyeMaticsAdminApprovalTask(api);
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public HandleMissingApprovalTask handleMissingApprovalTask() {
+        return new HandleMissingApprovalTask(api, dataSetStatusGenerator);
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public EvaluateAdminApprovalTask evaluateAdminApprovalTask() {
+        return new EvaluateAdminApprovalTask(api);
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public HandleDeniedProvisionTask handleDeniedProvisionTask() {
+        return new HandleDeniedProvisionTask(api, dataSetStatusGenerator);
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public ReadPatientDataTask readPatientDataTask() {
+        return new ReadPatientDataTask(api,
+                dataSetStatusGenerator,
+                provideFhirClientConfig.getFhirClientFactory(),
+                provideFhirClientConfig.getFhirStoreResourcePageSize(),
+                provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public ReadConsentDataTask readConsentDataTask() {
+        return new ReadConsentDataTask(api,
+                dataSetStatusGenerator,
+                provideFhirClientConfig.getFhirClientFactory(),
+                provideFhirClientConfig.getFhirStoreResourcePageSize(),
+                provideConsentConfig.getConsentResourceValidator(),
+                provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public ProcessGlobalPseudonymTask processGlobalPseudonymTask() {
+        return new ProcessGlobalPseudonymTask(api,
+                dataSetStatusGenerator,
+                provideFTTPClientConfig.getFTTPClientFactory(),
+                provideFTTPClientConfig.getFttpClientRequestResourceSize(),
+                provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public ReadMedicalDataTask readMedicalDataTask() {
+        return new ReadMedicalDataTask(api,
+                dataSetStatusGenerator,
+                provideFhirClientConfig.getFhirClientFactory(),
+                provideFhirClientConfig.getFhirStoreResourcePageSize(),
+                provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public CheckConsentMedicalDataTask checkConsentMedicalDataTask() {
+        return new CheckConsentMedicalDataTask(api, dataSetStatusGenerator, provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public PseudonymizeDataTask pseudonymizeDataTask() {
+        return new PseudonymizeDataTask(api,
+                dataSetStatusGenerator,
+                providePseudonymizeConfig.getFhirResourcePseudonymizer(), provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public CreateDataBundlesTask createDataBundlesTask() {
+        return new CreateDataBundlesTask(api,
+                dataSetStatusGenerator,
+                provideBundleConfig.getMaximumPatientsPerBundle(),
+                provideDataConfig.getWaitingDurationPatientsPerBundle(),
+                provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public EncryptDataBundleTask encryptDataBundleTask() {
+        return new EncryptDataBundleTask(api, dataSetStatusGenerator, cryptoConfig.keyProviderDicReceive(), provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public StoreProvideDataTask storeProvideDataTask() {
+        return new StoreProvideDataTask(api, dataSetStatusGenerator, provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public CloseReceiveSubProcessProvideMessageTask closeReceiveProcessProvideMessageTask() {
+        return new CloseReceiveSubProcessProvideMessageTask(api, dataSetStatusGenerator);
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public ProvideDataMessageTask provideDataMessageTask() {
+        return new ProvideDataMessageTask(api, dataSetStatusGenerator,  provideMeasurementConfig.getTimeMeasurementProvideSetup());
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public HandleMissingAcknowledgementTask handleMissingReceiptTask() {
+        return  new HandleMissingAcknowledgementTask(api, dataSetStatusGenerator);
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public DeleteProvideDataTask deleteProvideDataTask() {
+        return new DeleteProvideDataTask(api, dataSetStatusGenerator);
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public FinalizeProvideProcessTask storeDataReceiptTask() {
+        return new FinalizeProvideProcessTask(api,
+                dataSetStatusGenerator,
+                provideMailConfig.getProvideInformationEmailAddresses());
+    }
+
+}

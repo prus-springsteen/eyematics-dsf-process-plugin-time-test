@@ -1,0 +1,176 @@
+<CodeSystem xmlns="http://hl7.org/fhir">
+    <meta>
+        <tag>
+            <system value="http://dsf.dev/fhir/CodeSystem/read-access-tag" />
+            <code value="ALL" />
+        </tag>
+    </meta>
+    <url value="https://eyematics.org/fhir/CodeSystem/eyematics-generic-process-data-set-status-codes-code-system" />
+    <version value="#{version}" />
+    <name value="EyeMaticsGenericDatasetStatusCodeSystem" />
+    <title value="EyeMatics Generic Dataset Status Code System" />
+    <status value="unknown" />
+    <experimental value="false" />
+    <date value="#{date}" />
+    <publisher value="EyeMatics" />
+    <description value="CodeSystem with standard values for the status of transferring datasets within EyeMatics-Process" />
+    <caseSensitive value="true" />
+    <hierarchyMeaning value="grouped-by" />
+    <versionNeeded value="false" />
+    <content value="complete" />
+    <concept>
+        <code value="data-initiate-failure" />
+        <display value="Data Initiate Failure" />
+        <definition value="An error occurred during initiation of data sharing process." />
+    </concept>
+    <concept>
+        <code value="data-initiate-forbidden" />
+        <display value="Data Initiate Forbidden" />
+        <definition value="Initiation of data sharing process is forbidden." />
+    </concept>
+    <concept>
+        <code value="provide-initiate-failure" />
+        <display value="Provide Initiate Failure" />
+        <definition value="An error occurred during initiation of the provide process." />
+    </concept>
+    <concept>
+        <code value="provide-initiate-forbidden" />
+        <display value="Provide Initiate Forbidden" />
+        <definition value="Initiation of provide process is forbidden." />
+    </concept>
+    <concept>
+        <code value="provide-initiate-missing" />
+        <display value="Provide Initiate Missing" />
+        <definition value="Initiation of provide data request is missing." />
+    </concept>
+    <concept>
+        <code value="data-request-success" />
+        <display value="Data Request Success" />
+        <definition value="The request of the data was successful." />
+    </concept>
+    <concept>
+        <code value="data-request-failure" />
+        <display value="Data Request Failure" />
+        <definition value="An error occurred during a request of data." />
+    </concept>
+    <concept>
+        <code value="data-request-forbidden" />
+        <display value="Data Request Forbidden" />
+        <definition value="The request for data is forbidden." />
+    </concept>
+    <concept>
+        <code value="receive-close-failure" />
+        <display value="Receive Close Failure" />
+        <definition value="An error occurred during a request for closing a receive subprocess." />
+    </concept>
+    <concept>
+        <code value="receive-close-forbidden" />
+        <display value="Receive Close Forbidden" />
+        <definition value="The request for closing receive a subprocess is forbidden." />
+    </concept>
+    <concept>
+        <code value="admin-approval-missing" />
+        <display value="Admin Approval Missing" />
+        <definition value="The time for admin approval for data provision is missing." />
+    </concept>
+    <concept>
+        <code value="data-provide-denied" />
+        <display value="Data Provide Denied" />
+        <definition value="The admin denied the data provision for this request." />
+    </concept>
+    <concept>
+        <code value="data-read-failure" />
+        <display value="Data Read Failure" />
+        <definition value="An error occurred during reading of dataset." />
+    </concept>
+    <concept>
+        <code value="consent-check-failure" />
+        <display value="Consent Check Failure" />
+        <definition value="An error occurred during processing of the broad consents." />
+    </concept>
+    <concept>
+        <code value="patient-read-failure" />
+        <display value="Patient Read Failure" />
+        <definition value="An error occurred during reading of patients." />
+    </concept>
+    <concept>
+        <code value="pseudonym-process-failure" />
+        <display value="Patient Read Failure" />
+        <definition value="An error occurred during reading of patients." />
+    </concept>
+    <concept>
+        <code value="data-bundle-failure" />
+        <display value="Data Bundle Failure" />
+        <definition value="An error occurred during bundling of dataset." />
+    </concept>
+    <concept>
+        <code value="data-encrypt-failure" />
+        <display value="Data Encrypt Failure" />
+        <definition value="An error occurred during encryption of dataset." />
+    </concept>
+    <concept>
+        <code value="data-store-failure" />
+        <display value="Data Store Failure" />
+        <definition value="An error occurred during storing of dataset." />
+    </concept>
+    <concept>
+        <code value="data-provide-failure" />
+        <display value="Data Provide Failure" />
+        <definition value="An error occurred during provision of dataset." />
+    </concept>
+    <concept>
+        <code value="data-provide-forbidden" />
+        <display value="Data Provide Forbidden" />
+        <definition value="Provision of dataset is forbidden." />
+    </concept>
+    <concept>
+        <code value="data-acknowledge-missing" />
+        <display value="Data Acknowledge Missing" />
+        <definition value="Acknowledgement of dataset is missing." />
+    </concept>
+    <concept>
+        <code value="data-delete-failure" />
+        <display value="Data Delete Failure" />
+        <definition value="Provided dataset could not be deleted." />
+    </concept>
+    <concept>
+        <code value="data-download-failure" />
+        <display value="Data Download Failure" />
+        <definition value="An error occurred during download of dataset from DIC." />
+    </concept>
+    <concept>
+        <code value="data-decrypt-failure" />
+        <display value="Data Decrypt Failure" />
+        <definition value="An error occurred during decryption of dataset." />
+    </concept>
+    <concept>
+        <code value="partial-insert-failure" />
+        <display value="Partial Insert Failure" />
+        <definition value="An error occurred during insertion of parts of the provided dataset." />
+    </concept>
+    <concept>
+        <code value="complete-insert-failure" />
+        <display value="Complete Insert Failure" />
+        <definition value="An error occurred during insertion of the provided dataset." />
+    </concept>
+    <concept>
+        <code value="data-receive-success" />
+        <display value="Data Receive Success" />
+        <definition value="Receipt of dataset was successful." />
+    </concept>
+    <concept>
+        <code value="data-acknowledge-failure" />
+        <display value="Data Acknowledge Failure" />
+        <definition value="An error occurred during acknowledge of dataset." />
+    </concept>
+    <concept>
+        <code value="data-acknowledge-forbidden" />
+        <display value="Data Acknowledge Forbidden" />
+        <definition value="Acknowledgement of dataset is forbidden." />
+    </concept>
+    <concept>
+        <code value="data-provide-missing" />
+        <display value="Data Provide Missing" />
+        <definition value="Provision of dataset is missing." />
+    </concept>
+</CodeSystem>

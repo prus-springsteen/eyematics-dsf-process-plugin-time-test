@@ -1,0 +1,81 @@
+package org.eyematics.process.utils.delegate;
+
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
+import dev.dsf.bpe.v1.variables.Variables;
+import org.camunda.bpm.engine.delegate.BpmnError;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.eyematics.process.constant.EyeMaticsConstants;
+import org.eyematics.process.utils.generator.DataSetStatusGenerator;
+import org.eyematics.process.constant.EyeMaticsGenericStatus;
+import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Objects;
+
+
+public abstract class AbstractExtendedSubProcessServiceDelegate extends AbstractServiceDelegate {
+
+    private static final Logger logger = LoggerFactory.getLogger(AbstractExtendedSubProcessServiceDelegate.class);
+    protected final DataSetStatusGenerator dataSetStatusGenerator;
+
+    public AbstractExtendedSubProcessServiceDelegate(ProcessPluginApi api,
+                                                     DataSetStatusGenerator dataSetStatusGenerator) {
+        super(api);
+        this.dataSetStatusGenerator = dataSetStatusGenerator;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
+        Objects.requireNonNull(this.dataSetStatusGenerator, "dataSetStatusGenerator");
+    }
+
+    protected void handleTaskError(EyeMaticsGenericStatus eyeMaticsGenericErrors,
+                                   Variables variables,
+                                   String errorMessage) {
+        this.processTaskError(eyeMaticsGenericErrors, variables, errorMessage);
+        throw new BpmnError(eyeMaticsGenericErrors.getErrorCode());
+    }
+
+    protected BpmnError getHandleTaskError(EyeMaticsGenericStatus eyeMaticsGenericErrors,
+                                           Variables variables,
+                                           String errorMessage)  {
+        this.processTaskError(eyeMaticsGenericErrors, variables, errorMessage);
+        return new BpmnError(eyeMaticsGenericErrors.getErrorCode());
+    }
+
+    protected void processTaskError(EyeMaticsGenericStatus eyeMaticsGenericStatus,
+                                    Variables variables,
+                                    String errorMessage) {
+        Task task = variables.getLatestTask();
+        task.setStatus(Task.TaskStatus.FAILED);
+        task.addOutput(
+                this.dataSetStatusGenerator.createDataSetStatusOutput(eyeMaticsGenericStatus.getStatusCode(),
+                        EyeMaticsGenericStatus.getTypeSystem(),
+                        EyeMaticsGenericStatus.getTypeCode(),
+                        errorMessage));
+        String correlationKey = variables.getTarget().getCorrelationKey();
+        variables.setResource(EyeMaticsConstants.BPMN_EXECUTION_VARIABLE_ERROR_RESOURCE + "_" + correlationKey,
+                task.copy());
+        variables.updateTask(task);
+    }
+
+    protected void setVariable(DelegateExecution delegateExecution, String s, Object o) {
+        String correlationKey = this.api.getVariables(delegateExecution).getTarget().getCorrelationKey();
+        delegateExecution.setVariable(s + "_" + correlationKey, o);
+    }
+
+    protected Object getVariable(DelegateExecution delegateExecution, String s) {
+        String correlationKey = this.api.getVariables(delegateExecution).getTarget().getCorrelationKey();
+        return delegateExecution.getVariable(s + "_" + correlationKey);
+    }
+
+    protected void setVariable(DelegateExecution delegateExecution, String s, String id, Object o) {
+        this.setVariable(delegateExecution, s + "_" + id, o);
+    }
+
+    protected Object getVariable(DelegateExecution delegateExecution, String s, String id) {
+        return this.getVariable(delegateExecution, s + "_" + id);
+    }
+}
