@@ -2,7 +2,7 @@
 # Results
 
 In this repository the results of the time evaluation of the EyeMatics DSF process plugin are listed. Results were conducted through the variation of the number of patients and resources (see also [here](https://github.com/prus-springsteen/eyematics-dsf-process-plugin-time-test/blob/main/eyematics-dsf-process-plugin-test-data-generator/src/main/java/org/eyematics/process/tools/generator/FHIRResourceGenerator.java)).
-Time measurements are in milliseconds [ms]. The class TimeMeasurements is used to measure the time of the different tasks (see also here).
+Time measurements are in milliseconds [ms]. The class TimeMeasurements is used to measure the time of the different tasks (see also [here](https://github.com/prus-springsteen/eyematics-dsf-process-plugin-time-test/blob/main/eyematics-dsf-process-plugin-time-measurement/src/main/java/org/eyematics/process/utils/measurement/TimeMeasurement.java)).
 
 Raw data can be found in the folder `src\raw`.
 

@@ -1,6 +1,9 @@
 # EyeMatics DSF Process Plugin - Time Test Repository
 This repository contains the plugin for transferring data between DICs participating in the EyeMatics project for the [Data Sharing Framework](https://github.com/datasharingframework/dsf) (DSF).
 
+## Evaluation
+The time evaluation of the Provide and Receive processes can be found within the folders `evaluate` or directly within the corresponding [README](https://github.com/prus-springsteen/eyematics-dsf-process-plugin-time-test/blob/main/evaluate/README.md).
+
 ## Documentation
 The documentation of the process including the description, the deployment and configuration guides as well as instructions on how to start a process instance can be found in the [wiki](https://github.com/prus-springsteen/eyematics-dsf-process-plugin/wiki).
 The main documentation for the DSF can be found under [dsf.dev](https://dsf.dev).
